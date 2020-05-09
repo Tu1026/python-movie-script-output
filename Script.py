@@ -13,23 +13,19 @@ from bs4 import BeautifulSoup
 # Feference https://stackoverflow.com/questions/328356/extracting-text-from-html-file-using-python
 url = "https://web.njit.edu/~cm395/theBeeMovieScript/"
 html = urllib.request.urlopen(url).read()
-soup = BeautifulSoup(html)
+soup = BeautifulSoup(html, "html.parser")
 
 # kill all script and style elements
 for script in soup(["script", "style"]):
-    script.extract()    # rip it out
+    script.extract()  
 
-# get text
-text = soup.get_text()
+text = soup.find_all(text=True)
+story_words = []
+for word in text:
+    if word != "\n":
+       story_words.append(word)
 
-# break into lines and remove leading and trailing space on each
-lines = (line.strip() for line in text.splitlines())
-# break multi-headlines into a line each
-chunks = (phrase.strip() for line in lines for phrase in line.split("  "))
-# drop blank lines
-text = '\n'.join(chunk for chunk in chunks if chunk)
-
-print(text)
+# print(text)
 
 # username = str(input("Username: ")) 
 # client = fbchat.Client(username, getpass()) 
@@ -62,10 +58,10 @@ print(text)
 
 
 
-# for word in story_words[:10]:
-#     print(word)
-#     time.sleep(0.5)
+for word in story_words[:10]:
+    print(word)
+    time.sleep(0.5)
 
 
 
-client.logout()
+#client.logout()
