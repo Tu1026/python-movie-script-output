@@ -16,26 +16,29 @@ html = urllib.request.urlopen(url).read()
 soup = BeautifulSoup(html, "html.parser")
 
 # kill all script and style elements
-for script in soup(["script", "style"]):
+for script in soup(["script", "style",]):
     script.extract()  
 
-text = soup.find_all(text=True)
-story_words = []
-for word in text:
-    if word != "\n":
-       story_words.append(word)
+text = soup.get_text()
+# break into lines and remove leading and trailing space on each
+lines = (line.strip() for line in text.splitlines())
+# break multi-headlines into a line each
+chunks = (phrase.strip() for line in lines for phrase in line.split("  "))
+# drop blank lines
+text = '\n'.join(chunk for chunk in chunks if chunk)
 
-# print(text)
+
+print(text)
 
 # username = str(input("Username: ")) 
 # client = fbchat.Client(username, getpass()) 
 # story = urllib.request.urlopen("https://web.njit.edu/~cm395/theBeeMovieScript/")
-# story_words = []
+# story_words = []    
 # for line in story:
 #     line_words = line.decode("utf8").split()
 #     for word in line_words:
 #         story_words.append(word)
-
+# print (story_words)
 # story.close()
 
 # only iterate the first 5 lines
@@ -58,7 +61,7 @@ for word in text:
 
 
 
-for word in story_words[:10]:
+for word in story_words[:5]:
     print(word)
     time.sleep(0.5)
 
