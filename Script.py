@@ -11,9 +11,16 @@ from bs4 import BeautifulSoup
 # Find UID got to page source and search for entity_id
 ## impot movie script
 # Feference https://stackoverflow.com/questions/328356/extracting-text-from-html-file-using-python
+
+#log into fb
+username = str(input("Username: ")) 
+client = fbchat.Client(username, getpass()) 
+
+#input your desired sciprt website
 url = "https://web.njit.edu/~cm395/theBeeMovieScript/"
 html = urllib.request.urlopen(url).read()
 soup = BeautifulSoup(html, "html.parser")
+
 
 # kill all script and style elements
 for script in soup(["script", "style",]):
@@ -27,11 +34,30 @@ chunks = (phrase.strip() for line in lines for phrase in line.split("  "))
 # drop blank lines
 text = '\n'.join(chunk for chunk in chunks if chunk)
 
+#split the words by spaces
+words = text.split()
 
-print(text)
+# send to friends
+#send only the first 30 lines of the script to friend we set uid
+for word in words[:30]:
+    client.send(fbchat.models.Message(word),
+            100007996267897)
+    time.sleep(0.5)
 
-# username = str(input("Username: ")) 
-# client = fbchat.Client(username, getpass()) 
+# send to group(have to change thread_type)
+# iterate the whole script with 0.5 second interval between each line
+# Thread_id = "2924605430988816"
+# Thread_type = ThreadType.GROUP
+# for word in story_words[:5]:
+#     client.send(fbchat.models.Message(word),
+#             thread_id=Thread_id, thread_type=Thread_type)
+#     time.sleep(0.5)
+
+
+client.logout()
+    
+
+#this method keeps the headers and style
 # story = urllib.request.urlopen("https://web.njit.edu/~cm395/theBeeMovieScript/")
 # story_words = []    
 # for line in story:
@@ -41,30 +67,7 @@ print(text)
 # print (story_words)
 # story.close()
 
-# only iterate the first 5 lines
-# send to friends
-
-# for word in story_words[:30]:
-#     client.send(fbchat.models.Message(word),
-#             100007996267897)
+#this metohd checks the correct behavior in console
+# for word in words[:5]:
+#     print(word)
 #     time.sleep(0.5)
-
-
-#send to group
-#iterate the whole script with 0.5 second interval between each line
-# Thread_id = "2924605430988816"
-# Thread_type = ThreadType.GROUP
-# for word in story_words[:5]:
-#     client.send(fbchat.models.Message(word),
-#             thread_id=Thread_id, thread_type=Thread_type)
-#     time.sleep(0.5)
-
-
-
-for word in story_words[:5]:
-    print(word)
-    time.sleep(0.5)
-
-
-
-#client.logout()
