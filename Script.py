@@ -1,3 +1,4 @@
+#!/usr/bin/env python 
 """ Retrieve all line from a movie script with given url and print
 one line at a time to friend/group on fb messenger with given uid.
     
